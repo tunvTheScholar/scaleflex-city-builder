@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<p align="center">
+<a href="https://plane.so">
+  <img src="./docs/images/city-building-logo-96.png" alt="City Builder" width="70">
+</a>
+</p>
+<h1 align="center"><b>City Builder</b></h1>
+<p align="center"><b>An interactive web application that allows users to create and customize a city by building</b></p>
+<p align="center">
+managing houses with different attributes. Users can adjust house properties, manage weather conditions, and create an engaging cityscape.
+</p>
 
-## Getting Started
+# Live Demo
 
-First, run the development server:
+[TBD]
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+# Tech Stack
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+[NextJS]()
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+[TailwindCSS]()
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+[Shadcn]()
 
-## Learn More
+[Tanstack/ReactQuery]()
 
-To learn more about Next.js, take a look at the following resources:
+[localStorageAPI]()
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+[Cypress]()
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# ⭐️ Features
 
-## Deploy on Vercel
+## Core Features
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. House Customization
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Adjust house colors
+- Set number of floors
+- Name houses
+- Customize individual floor colors (bonus)
+
+2. House Management
+
+- Add new houses
+- Duplicate existing houses
+- Remove houses
+
+3. Weather System
+
+- Display weather icons (sun, rain, snow)
+- Show current temperature based on location
+
+4. State Persistence
+
+- Save city state to localStorage
+- Restore previous session
+
+# ⏰ Task Breakdown and Time Estimates
+
+1. Project Setup and Configuration (2 hours)
+
+- Initialize Next.js project with pnpm
+- Configure Tailwind CSS
+- Set up React Query
+- Configure Cypress for e2e testing
+
+2. Core Components Development (8 hours)
+
+- House component (6 hours)
+- Weather widget (2 hours)
+
+3. State Management and Logic (8h)
+
+- House management functions
+- localStorage integration
+- Weather state handling
+
+Bonus Features (16 hours)
+
+Animations (4 hours)
+Drag & drop (6 hours)
+Floor color customization (3 hours)
+Testing (3 hours)
+
+# Project Structure
+
+[TBD]
