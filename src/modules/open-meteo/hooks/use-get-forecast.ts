@@ -1,8 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { getForecast } from "../services/rest/v1/get-forecast";
+import { IGetForecastArgs } from "../services/rest/v1/get-forecast/types";
 
-export const useGetForecast = () =>
+export const useGetForecast = (args: IGetForecastArgs) =>
   useQuery({
-    queryKey: ["getForecast"],
-    queryFn: getForecast,
+    queryKey: ["getForecast", args],
+    queryFn: () => getForecast(args),
   });
