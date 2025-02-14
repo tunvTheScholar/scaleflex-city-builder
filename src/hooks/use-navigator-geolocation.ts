@@ -26,6 +26,7 @@ export const useNavigatorGeolocation = (defaultLocation = DEFAULT_LOCATION) => {
   useEffect(() => {
     if (!window.navigator) {
       console.error(`[ERROR]: Browser does not support`);
+      setLoading(false);
       return;
     }
 
