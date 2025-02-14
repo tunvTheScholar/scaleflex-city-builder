@@ -21,7 +21,7 @@ export default function WeatherWidgetWrapper(props: WeatherWidgetWrapperProps) {
     return (
       <div
         data-cy="WeatherWidget-Loading"
-        className="h-10 w-20 rounded-sm bg-gray-900 animate-pulse absolute top-4 right-4"
+        className="h-10 w-20 rounded-sm bg-gray-900 animate-pulse absolute top-4 right-4 z-[20]"
       ></div>
     );
   }
