@@ -1,13 +1,24 @@
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { useEffect, useState } from "react";
-import { DEFAULT_LOCATION, LOCATION_LOCAL_STORAGE_KEY } from "../constants";
-import { ILocation } from "../types";
+
+import { LOCAL_STORAGE_KEYS } from "@/constants/local-storage-keys";
+
+export interface ILocation {
+  longitude: number;
+  latitude: number;
+  name?: string;
+}
+
+const DEFAULT_LOCATION: ILocation = {
+  longitude: 122.4194,
+  latitude: 37.7749,
+};
 
 const REQUEST_TIMEOUT_MS = 10000; // 10s
 
 export const useNavigatorGeolocation = (defaultLocation = DEFAULT_LOCATION) => {
   const [location, setLocation] = useLocalStorage<ILocation>(
-    LOCATION_LOCAL_STORAGE_KEY,
+    LOCAL_STORAGE_KEYS.LOCATION,
     defaultLocation
   );
   const [loading, setLoading] = useState(true);
@@ -15,6 +26,7 @@ export const useNavigatorGeolocation = (defaultLocation = DEFAULT_LOCATION) => {
   useEffect(() => {
     if (!window.navigator) {
       console.error(`[ERROR]: Browser does not support`);
+      setLoading(false);
       return;
     }
 
