@@ -1,5 +1,5 @@
 export const PRE_DEFINED_BUILDING_COLORS = [
-  { label: "White", value: "white" },
+  { label: "Light Gray", value: "lightgray" },
   { label: "Red", value: "#FF5733" },
   { label: "Green", value: "#33FF57" },
   { label: "Blue", value: "#3357FF" },
