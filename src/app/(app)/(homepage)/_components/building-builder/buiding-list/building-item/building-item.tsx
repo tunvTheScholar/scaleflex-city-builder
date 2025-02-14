@@ -1,14 +1,16 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { IBuilding } from "../../types";
-import { noop } from "@/constants/fn";
 import { Slider } from "@/components/ui/slider";
-import { CSSProperties, useState } from "react";
+import { noop } from "@/constants/fn";
+import { CSSProperties, useEffect, useState } from "react";
 import { PRE_DEFINED_BUILDING_COLORS } from "../../constants";
+import { IBuilding } from "../../types";
+import { debounce } from "@/lib/debounce";
 
 interface BuildingItemProps extends IBuilding {
   onChangeColor?: (id: string, color: string) => void;
+  onChangeNoOfFloors?: (id: string, floors: number) => void;
   onDeleteBuilding?: (id: string) => void;
   onDuplicateBuilding?: (id: string) => void;
   style?: CSSProperties;
@@ -19,14 +21,19 @@ export default function BuildingItem({
   name = "Lorem",
   noOfFloor,
   onChangeColor = noop,
+  onChangeNoOfFloors = noop,
   onDeleteBuilding = noop,
   onDuplicateBuilding = noop,
   style,
 }: BuildingItemProps) {
   const [floors, setFloors] = useState(noOfFloor);
+  const [debounceChangeNoOfFloor] = useState(() =>
+    debounce(onChangeNoOfFloors, 500)
+  );
 
   const handleChangeFloor = (value: number) => {
     setFloors(value);
+    debounceChangeNoOfFloor(id, value);
   };
 
   return (
@@ -58,6 +65,9 @@ export default function BuildingItem({
             <span>Floors:</span>
             <div className="w-fit">
               <input
+                type="number"
+                min={1}
+                max={100}
                 inputMode="decimal"
                 value={floors}
                 className="border w-full rounded-sm px-2"
@@ -76,7 +86,7 @@ export default function BuildingItem({
               defaultValue={[noOfFloor]}
               step={1}
               min={1}
-              max={100}
+              max={10}
               onValueChange={(v) => handleChangeFloor(v[0])}
               value={[floors]}
             />

@@ -25,7 +25,7 @@ export default function BuildingList(props: BuildingListProps) {
       id,
       noOfFloor: 1,
       name,
-      color: "white",
+      color: "lightgray",
     };
 
     setBuildings({
@@ -43,6 +43,14 @@ export default function BuildingList(props: BuildingListProps) {
     const newBuildings = buildings.buildings.map((b) =>
       b.id === id ? { ...b, color } : b
     );
+    setBuildings({ buildings: newBuildings });
+  };
+
+  const handleChangeBuildingFloors = (id: string, floors: number) => {
+    const newBuildings = buildings.buildings.map((b) =>
+      b.id === id ? { ...b, noOfFloor: floors } : b
+    );
+
     setBuildings({ buildings: newBuildings });
   };
 
@@ -90,6 +98,7 @@ export default function BuildingList(props: BuildingListProps) {
                     onDeleteBuilding={handleDeleteBuilding}
                     onChangeColor={handleChangeBuildingColor}
                     onDuplicateBuilding={handleDuplicateBuilding}
+                    onChangeNoOfFloors={handleChangeBuildingFloors}
                   />
                 )}
               </FixedSizeList>
