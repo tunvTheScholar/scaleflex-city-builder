@@ -17,7 +17,7 @@ export default function WeatherWidget({
   return (
     <div
       data-cy="WeatherWidget"
-      className="px-4 py-2 rounded-sm shadow w-30 flex gap-2 absolute top-4 right-4 cursor-default"
+      className="px-4 py-2 rounded-sm shadow w-30 flex gap-2 absolute top-4 right-4 cursor-default z-10 bg-white"
       title={description}
     >
       <p>
