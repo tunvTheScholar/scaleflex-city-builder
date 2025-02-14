@@ -5,8 +5,8 @@ import { useNavigatorGeolocation } from "@/hooks/use-navigator-geolocation";
 import {
   weathercodeToDescriptions,
   weatherCodeToIcon,
-} from "@/modules/open-meteo/functions/mapping-weathercode";
-import { useGetForecast } from "@/modules/open-meteo/hooks/use-get-forecast";
+} from "@/services/open-meteo/rest/v1/get-forecast/mapping-weathercode";
+import { useGetForecast } from "@/services/open-meteo/rest/v1/get-forecast/use-get-forecast";
 
 interface WeatherWidgetWrapperProps {}
 export default function WeatherWidgetWrapper(props: WeatherWidgetWrapperProps) {
