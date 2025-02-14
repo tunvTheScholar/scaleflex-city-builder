@@ -30,8 +30,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ReactQueryProvider>
-          <AppHeader />
-          <main className="relative">{children}</main>
+          <>{children}</>
         </ReactQueryProvider>
       </body>
     </html>
