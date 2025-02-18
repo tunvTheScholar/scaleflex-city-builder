@@ -1,75 +1,46 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { LOCAL_STORAGE_KEYS } from "@/constants/local-storage-keys";
-import { useLocalStorage } from "@/hooks/use-local-storage";
-import { generateUniqueId } from "@/lib/generate-unique-id";
+import { useBuildings } from "@/hooks/use-building";
+import memoize from "memoize-one";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { FixedSizeList } from "react-window";
-import { IBuilding, IBuildingData } from "../types";
+import { IBuilding } from "../types";
 import BuildingItem from "./building-item";
+
+const createMemoBuildingsData = memoize(
+  (
+    buildings: IBuilding[],
+    createBuilding: () => void,
+    updateBuilding: (id: string, building: Partial<IBuilding>) => void,
+    duplicateBuilding: (id: string) => void,
+    deleteBuilding: (id: string) => void
+  ) => ({
+    buildings,
+    createBuilding,
+    updateBuilding,
+    duplicateBuilding,
+    deleteBuilding,
+  })
+);
 
 interface BuildingListProps {}
 export default function BuildingList(props: BuildingListProps) {
-  const [buildings, setBuildings] = useLocalStorage<IBuildingData>(
-    LOCAL_STORAGE_KEYS.BUILDINGS,
-    { buildings: [] }
+  const {
+    buildings,
+    createBuilding,
+    deleteBuilding,
+    duplicateBuilding,
+    updateBuilding,
+  } = useBuildings();
+
+  const memoData = createMemoBuildingsData(
+    buildings,
+    createBuilding,
+    updateBuilding,
+    duplicateBuilding,
+    deleteBuilding
   );
-
-  const handleCreateNewBuilding = () => {
-    const noOfBuildings = buildings.buildings.length;
-    const name = `House ${noOfBuildings + 1}`;
-    const id = generateUniqueId();
-
-    const newHouse: IBuilding = {
-      id,
-      noOfFloor: 1,
-      name,
-      color: "lightgray",
-    };
-
-    setBuildings({
-      buildings: [...buildings.buildings, newHouse],
-    });
-  };
-
-  const handleDeleteBuilding = (id: string) => {
-    setBuildings({
-      buildings: buildings.buildings.filter((building) => building.id !== id),
-    });
-  };
-
-  const handleChangeBuildingColor = (id: string, color: string) => {
-    const newBuildings = buildings.buildings.map((b) =>
-      b.id === id ? { ...b, color } : b
-    );
-    setBuildings({ buildings: newBuildings });
-  };
-
-  const handleChangeBuildingFloors = (id: string, floors: number) => {
-    const newBuildings = buildings.buildings.map((b) =>
-      b.id === id ? { ...b, noOfFloor: floors } : b
-    );
-
-    setBuildings({ buildings: newBuildings });
-  };
-
-  const handleDuplicateBuilding = (id: string) => {
-    const building = buildings.buildings.find((b) => b.id === id);
-    if (!building) {
-      return;
-    }
-    const uniqueId = generateUniqueId();
-
-    const newBuildings = [
-      ...buildings.buildings,
-      { ...building, name: `Duplicate ${building.name}`, id: uniqueId },
-    ];
-
-    setBuildings({ buildings: newBuildings });
-  };
-
-  const hasBuilding = buildings.buildings.length > 0;
 
   return (
     <div data-cy="BuildingList" className="rounded-sm shadow p-4 flex flex-col">
@@ -80,27 +51,18 @@ export default function BuildingList(props: BuildingListProps) {
         data-cy="BuildingList-Content"
         className="h-[500px] overflow-y-auto py-4"
       >
-        {hasBuilding ? (
+        {buildings.length > 0 ? (
           <AutoSizer>
             {({ height, width }) => (
               <FixedSizeList
                 height={height}
                 width={width}
                 className="list"
-                itemCount={buildings.buildings.length}
+                itemCount={buildings.length}
                 itemSize={120}
-                itemData={buildings.buildings}
+                itemData={memoData}
               >
-                {({ index, data, style }) => (
-                  <BuildingItem
-                    {...data[index]}
-                    style={style}
-                    onDeleteBuilding={handleDeleteBuilding}
-                    onChangeColor={handleChangeBuildingColor}
-                    onDuplicateBuilding={handleDuplicateBuilding}
-                    onChangeNoOfFloors={handleChangeBuildingFloors}
-                  />
-                )}
+                {BuildingItem}
               </FixedSizeList>
             )}
           </AutoSizer>
@@ -111,7 +73,7 @@ export default function BuildingList(props: BuildingListProps) {
         )}
       </div>
       <div data-cy="BuildingList-Footer" className="border-t pt-4">
-        <Button onClick={handleCreateNewBuilding}>Create new house</Button>
+        <Button onClick={createBuilding}>Create new house</Button>
       </div>
     </div>
   );

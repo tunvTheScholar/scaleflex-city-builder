@@ -2,47 +2,56 @@
 
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
-import { noop } from "@/constants/fn";
 import { debounce } from "@/lib/debounce";
 import { CSSProperties, memo, useState } from "react";
 import { PRE_DEFINED_BUILDING_COLORS } from "../../constants";
 import { IBuilding } from "../../types";
 
-interface BuildingItemProps extends IBuilding {
-  onChangeColor?: (id: string, color: string) => void;
-  onChangeNoOfFloors?: (id: string, floors: number) => void;
-  onDeleteBuilding?: (id: string) => void;
-  onDuplicateBuilding?: (id: string) => void;
+interface BuildingItemProps {
+  data: {
+    createBuilding: () => void;
+    updateBuilding: (id: string, building: Partial<IBuilding>) => void;
+    duplicateBuilding: (id: string) => void;
+    deleteBuilding: (id: string) => void;
+    buildings: IBuilding[];
+  };
+  index: number;
   style?: CSSProperties;
 }
 const BuildingItem = memo(function BuildingItem({
-  color = "white",
-  id,
-  name = "Lorem",
-  noOfFloor,
-  onChangeColor = noop,
-  onChangeNoOfFloors = noop,
-  onDeleteBuilding = noop,
-  onDuplicateBuilding = noop,
+  data,
+  index,
   style,
 }: BuildingItemProps) {
-  const [floors, setFloors] = useState(noOfFloor);
+  const { buildings, deleteBuilding, duplicateBuilding, updateBuilding } = data;
+  const buildingData = buildings[index];
+
+  const [floors, setFloors] = useState(buildingData.noOfFloor);
+
   const [debounceChangeNoOfFloor] = useState(() =>
-    debounce(onChangeNoOfFloors, 500)
+    debounce(updateBuilding, 500)
   );
 
   const handleChangeFloor = (value: number) => {
     setFloors(value);
-    debounceChangeNoOfFloor(id, value);
+    debounceChangeNoOfFloor(buildingData.id, {
+      ...buildingData,
+      noOfFloor: value,
+    });
   };
 
   return (
-    <div data-cy="BuildingItem" className="my-2" style={style} data-id={id}>
+    <div
+      data-cy="BuildingItem"
+      className="my-2"
+      style={style}
+      data-id={buildingData.id}
+    >
       <div className="flex justify-between align-center">
-        <p>{name}</p>
+        <p>{buildingData.name}</p>
         <div className="flex gap-2">
           <Button
-            onClick={() => onDeleteBuilding(id)}
+            onClick={() => deleteBuilding(buildingData.id)}
             size="sm"
             title={`Delete ${name}`}
             variant="ghost"
@@ -50,7 +59,7 @@ const BuildingItem = memo(function BuildingItem({
             🗑️
           </Button>
           <Button
-            onClick={() => onDuplicateBuilding(id)}
+            onClick={() => duplicateBuilding(buildingData.id)}
             size="sm"
             title={`Duplicate ${name}`}
             variant="secondary"
@@ -67,23 +76,19 @@ const BuildingItem = memo(function BuildingItem({
               <input
                 type="number"
                 min={1}
-                max={100}
+                max={10}
                 inputMode="decimal"
                 value={floors}
                 className="border w-full rounded-sm px-2"
                 onChange={(evt) =>
-                  handleChangeFloor(
-                    Boolean(+evt.currentTarget.value)
-                      ? +evt.currentTarget.value
-                      : 1
-                  )
+                  handleChangeFloor(+evt.currentTarget.value || 1)
                 }
               />
             </div>
           </div>
           <div>
             <Slider
-              defaultValue={[noOfFloor]}
+              defaultValue={[buildingData.noOfFloor]}
               step={1}
               min={1}
               max={10}
@@ -97,8 +102,13 @@ const BuildingItem = memo(function BuildingItem({
           <div className="w-fit">
             <select
               className="border rounded-sm w-full"
-              onChange={(e) => onChangeColor(id, e.target.value)}
-              value={color}
+              onChange={(e) =>
+                updateBuilding(buildingData.id, {
+                  ...buildingData,
+                  color: e.target.value,
+                })
+              }
+              value={buildingData.color}
             >
               {PRE_DEFINED_BUILDING_COLORS.map(({ label, value }) => (
                 <option value={value} key={value}>
