@@ -1,20 +1,20 @@
 "use client";
 
-import { CSSProperties } from "react";
+import { CSSProperties, memo } from "react";
+import { areEqual } from "react-window";
 import { IBuilding } from "../../types";
-import Roof from "./roof";
 import Floor from "./floor";
+import Roof from "./roof";
 
-interface RenderBuildingProps extends IBuilding {
+interface RenderBuildingProps {
   style?: CSSProperties;
+  index: number;
+  data: IBuilding[];
 }
-export default function RenderBuilding({
-  id,
-  noOfFloor,
-  color,
-  name,
-  style,
-}: RenderBuildingProps) {
+
+const RenderBuilding = memo(({ data, index, style }: RenderBuildingProps) => {
+  const { noOfFloor, color, name } = data[index];
+
   return (
     <div
       data-cy="RenderBuilding"
@@ -32,4 +32,7 @@ export default function RenderBuilding({
       </div>
     </div>
   );
-}
+}, areEqual);
+
+RenderBuilding.displayName = "RenderBuilding";
+export default RenderBuilding;

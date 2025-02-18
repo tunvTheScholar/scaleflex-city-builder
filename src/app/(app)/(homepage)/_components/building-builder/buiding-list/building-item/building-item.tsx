@@ -3,10 +3,10 @@
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { noop } from "@/constants/fn";
-import { CSSProperties, useEffect, useState } from "react";
+import { debounce } from "@/lib/debounce";
+import { CSSProperties, memo, useState } from "react";
 import { PRE_DEFINED_BUILDING_COLORS } from "../../constants";
 import { IBuilding } from "../../types";
-import { debounce } from "@/lib/debounce";
 
 interface BuildingItemProps extends IBuilding {
   onChangeColor?: (id: string, color: string) => void;
@@ -15,7 +15,7 @@ interface BuildingItemProps extends IBuilding {
   onDuplicateBuilding?: (id: string) => void;
   style?: CSSProperties;
 }
-export default function BuildingItem({
+const BuildingItem = memo(function BuildingItem({
   color = "white",
   id,
   name = "Lorem",
@@ -111,4 +111,8 @@ export default function BuildingItem({
       </div>
     </div>
   );
-}
+});
+
+BuildingItem.displayName = "BuildingItem";
+
+export default BuildingItem;

@@ -2,10 +2,10 @@
 
 import { LOCAL_STORAGE_KEYS } from "@/constants/local-storage-keys";
 import { useLocalStorage } from "@/hooks/use-local-storage";
-import { IBuildingData } from "../types";
-import RenderBuilding from "./render-building";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { FixedSizeList } from "react-window";
+import { IBuildingData } from "../types";
+import RenderBuilding from "./render-building";
 
 interface RenderBuildingsProps {}
 export default function RenderBuildings(props: RenderBuildingsProps) {
@@ -26,15 +26,7 @@ export default function RenderBuildings(props: RenderBuildingsProps) {
             layout="horizontal"
             itemData={buildings.buildings}
           >
-            {({ style, data, index }) => {
-              const building = data[index];
-
-              return (
-                <div style={style}>
-                  <RenderBuilding {...building} />
-                </div>
-              );
-            }}
+            {RenderBuilding}
           </FixedSizeList>
         )}
       </AutoSizer>
